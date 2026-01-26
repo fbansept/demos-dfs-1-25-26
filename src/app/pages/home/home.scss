@@ -1,0 +1,101 @@
+.bouton {
+  padding: 1em;
+  background-color: #007bff;
+  color: white;
+  user-select: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.categorie {
+  height: 150px;
+  display: flex;
+
+  &:nth-child(1) {
+    .en-tete {
+      background-color: red;
+    }
+  }
+
+  &:nth-child(2) {
+    .en-tete {
+      background-color: rgb(255, 174, 0);
+    }
+  }
+
+  &:nth-child(3) {
+    .en-tete {
+      background-color: rgb(153, 255, 0);
+    }
+  }
+
+  &:nth-child(4) {
+    .en-tete {
+      background-color: rgb(0, 229, 255);
+    }
+  }
+
+  &:nth-child(5) {
+    .en-tete {
+      background-color: rgb(4, 0, 255);
+    }
+  }
+
+  .en-tete {
+    width: 150px;
+    background-color: #ff00d0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+  }
+
+  .liste-images {
+    display: flex;
+
+    .image {
+      position: relative;
+
+      &:hover {
+        .bouton {
+          opacity: 1;
+        }
+      }
+
+      img {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+      }
+
+      .bouton {
+        opacity: 0;
+        transition: opacity 0.5s;
+        padding: 2px;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+
+        &.bouton-supprimer {
+          top: 0;
+          left: 0;
+          background-color: red;
+        }
+
+        &.bouton-monter {
+          top: 0;
+          right: 0;
+        }
+
+        &.bouton-descendre {
+          bottom: 0;
+          right: 0;
+        }
+      }
+    }
+  }
+}

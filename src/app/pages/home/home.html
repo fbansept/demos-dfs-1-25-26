@@ -1,1 +1,46 @@
-<button matButton="elevated">Basic</button>
+<div class="d-flex">
+  <input [(ngModel)]="urlImageSaisie" />
+  <div class="bouton" (click)="ajouterImage()">Ajouter</div>
+</div>
+
+<div class="liste-categories">
+  @for (categorie of categories; track indexCategorie; let indexCategorie = $index) {
+    <div class="categorie">
+      <div class="en-tete">
+        <span>{{ categorie.titre }}</span>
+      </div>
+      <div class="liste-images">
+        @for (urlImage of categorie.images; track indexImage; let indexImage = $index) {
+          <div class="image">
+            <img src="{{ urlImage }}" />
+
+            @if (indexCategorie > 0) {
+              <div
+                class="bouton bouton-monter"
+                (click)="deplacementImage(indexCategorie, indexImage)"
+              >
+                +
+              </div>
+            }
+
+            @if (indexCategorie < categories.length - 1) {
+              <div
+                class="bouton bouton-descendre"
+                (click)="deplacementImage(indexCategorie, indexImage, false)"
+              >
+                -
+              </div>
+            }
+
+            <div
+              class="bouton bouton-supprimer"
+              (click)="supprimerImage(indexCategorie, indexImage)"
+            >
+              x
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
