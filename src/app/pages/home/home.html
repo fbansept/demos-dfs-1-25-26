@@ -12,7 +12,7 @@
       <div class="liste-images">
         @for (urlImage of categorie.images; track indexImage; let indexImage = $index) {
           <div class="image">
-            <img src="{{ urlImage }}" />
+            <img [attr.src]="urlImage" />
 
             @if (indexCategorie > 0) {
               <div
