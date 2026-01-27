@@ -60,6 +60,10 @@
     .image {
       position: relative;
 
+      &.highlighted {
+        border: 5px solid yellow;
+      }
+
       &:hover {
         .bouton {
           opacity: 1;

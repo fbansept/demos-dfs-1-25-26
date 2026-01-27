@@ -11,7 +11,12 @@
       </div>
       <div class="liste-images">
         @for (urlImage of categorie.images; track indexImage; let indexImage = $index) {
-          <div class="image">
+          <div
+            class="image"
+            [class.highlighted]="
+              indexCategorieDestination === indexCategorie && indexImageDestination === indexImage
+            "
+          >
             <img [attr.src]="urlImage" />
 
             @if (indexCategorie > 0) {

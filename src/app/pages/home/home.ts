@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { NgClass } from '../../../../node_modules/@angular/common/types/_common_module-chunk';
 
 @Component({
   selector: 'app-home',
@@ -38,6 +39,9 @@ export class Home {
 
   categories: Categorie[] = [];
 
+  indexCategorieDestination: number | null = null;
+  indexImageDestination: number | null = null;
+
   ngOnInit() {
     const categoriesSauvegardeesJson = localStorage.getItem('sauvegarde');
 
@@ -52,25 +56,31 @@ export class Home {
       ];
     }
   }
-
   sauvegarder() {
     localStorage.setItem('sauvegarde', JSON.stringify(this.categories));
   }
-
   ajouterImage() {
     if (this.urlImageSaisie !== '') {
       this.categories[0].images.push(this.urlImageSaisie);
       this.urlImageSaisie = '';
       this.sauvegarder();
+
+      this.indexCategorieDestination = 0;
+      this.indexImageDestination = this.categories[0].images.length - 1;
     }
   }
-
   deplacementImage(indexCategorie: number, indexImage: number, monter: boolean = true) {
     //on recupere l'url de l'image a deplacer
     const urlImageAdeplacer = this.categories[indexCategorie].images[indexImage];
 
+    //on calcule l'index de la categorie de destination
+    this.indexCategorieDestination = indexCategorie + (monter ? -1 : 1);
+
     //on copie l'image dans la categorie du dessous
-    this.categories[indexCategorie + (monter ? -1 : 1)].images.push(urlImageAdeplacer);
+    this.categories[this.indexCategorieDestination].images.push(urlImageAdeplacer);
+
+    //on met a jour l'index de l'image de destination
+    this.indexImageDestination = this.categories[this.indexCategorieDestination].images.length - 1;
 
     //on supprime l'image de la categorie actuelle
     this.categories[indexCategorie].images.splice(indexImage, 1);
@@ -81,5 +91,7 @@ export class Home {
     //on supprime l'image de la categorie actuelle
     this.categories[indexCategorie].images.splice(indexImage, 1);
     this.sauvegarder();
+    this.indexCategorieDestination = null;
+    this.indexImageDestination = null;
   }
 }
