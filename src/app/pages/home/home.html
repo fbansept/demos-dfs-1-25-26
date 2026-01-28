@@ -9,7 +9,7 @@
 </div>
 
 <div class="liste-categories">
-  @for (categorie of categories(); track indexCategorie; let indexCategorie = $index) {
+  @for (categorie of categorieService.categories(); track indexCategorie; let indexCategorie = $index) {
     <div class="categorie">
       <div class="en-tete">
         <span [ngStyle]="{ 'font-size': valeurSlider + 'px' }">{{ categorie.titre }}</span>
@@ -33,7 +33,7 @@
               </div>
             }
 
-            @if (indexCategorie < categories.length - 1) {
+            @if (indexCategorie < categorieService.categories().length - 1) {
               <div
                 class="bouton bouton-descendre"
                 (click)="deplacementImage(indexCategorie, indexImage, false)"

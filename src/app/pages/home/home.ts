@@ -1,13 +1,15 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
-import { HttpClient } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NotificationService } from '../../services/notification';
+import { CategorieService } from '../../services/categorie';
 
 @Component({
   selector: 'app-home',
-  imports: [MatButtonModule, FormsModule, CommonModule, MatSliderModule],
+  imports: [MatButtonModule, FormsModule, CommonModule, MatSliderModule, MatSnackBarModule],
   templateUrl: './home.html',
   styleUrl: './home.scss',
 })
@@ -15,12 +17,11 @@ export class Home {
   urlImageSaisie = '';
   valeurSlider = 50;
 
-  categories = signal<Categorie[]>([]);
-
   indexCategorieDestination: number | null = null;
   indexImageDestination: number | null = null;
 
-  http = inject(HttpClient);
+  categorieService = inject(CategorieService);
+  notification = inject(NotificationService);
 
   ngOnInit() {
     this.refreshCategories();
@@ -38,9 +39,9 @@ export class Home {
   }
 
   refreshCategories() {
-    this.http.get<Categorie[]>('http://localhost:3000/categories').subscribe((data) => {
-      this.categories.set(data);
-    });
+    this.categorieService.getAll().subscribe();
+
+    //quans c'est fini je veux afficher une notification
   }
 
   // sauvegarder() {
@@ -49,13 +50,14 @@ export class Home {
 
   ajouterImage() {
     if (this.urlImageSaisie !== '') {
-      this.http
-        .post('http://localhost:3000/image', {
-          url: this.urlImageSaisie,
-        })
-        .subscribe((response) => {
-          this.refreshCategories();
-        });
+      this.categorieService.ajouterImage(this.urlImageSaisie).subscribe({
+        next: (response) => {
+          this.notification.valid("l'image a bien été ajoutée");
+        },
+        error: (erreur) => {
+          this.notification.error("l'url est invalide");
+        },
+      });
 
       //gestion par le localstorage (a supprimer)
       //this.categories[0].images.push(this.urlImageSaisie);
@@ -67,6 +69,16 @@ export class Home {
     }
   }
   deplacementImage(indexCategorie: number, indexImage: number, monter: boolean = true) {
+
+    this.categorieService.deplacerImage(indexCategorie, indexImage, monter).subscribe({
+      next: (response) => {
+        this.notification.valid("l'image a bien été déplacée");
+      },
+      error: (erreur) => {
+        this.notification.error("impossible de déplacer l'image");
+      },
+    });
+
     //on recupere l'url de l'image a deplacer
     // const urlImageAdeplacer = this.categories[indexCategorie].images[indexImage];
 
@@ -86,8 +98,18 @@ export class Home {
 
   supprimerImage(indexCategorie: number, indexImage: number) {
     //on supprime l'image de la categorie actuelle
-    // this.categories[indexCategorie].images.splice(indexImage, 1);
-    // this.sauvegarder();
+
+    this.categorieService
+      .supprimerImage(indexCategorie, indexImage)
+      .subscribe({
+        next: (response) => {
+          this.notification.valid("l'image a bien été supprimée");
+        },
+        error: (erreur) => {
+          this.notification.error("impossible de supprimer l'image");
+        },
+      });
+
     this.indexCategorieDestination = null;
     this.indexImageDestination = null;
   }
