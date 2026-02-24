@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Authentification } from './services/authentification';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +10,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class App {
 
+   authentification = inject(Authentification);
   
  
 }

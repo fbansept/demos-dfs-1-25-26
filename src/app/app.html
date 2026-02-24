@@ -20,14 +20,17 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/dashboard" routerLinkActive="page-actuelle">Dashboard</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="login" routerLinkActive="page-actuelle"> Login </a>
-        </li>
+
+        @if(authentification.logged()) {
+          <li class="nav-item">
+            <a class="nav-link" (click)="authentification.logout()" routerLink="login"> Logout </a>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="login" routerLinkActive="page-actuelle"> Login </a>
+          </li>
+        }
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
     </div>
   </div>
 </nav>
